@@ -1,0 +1,15 @@
+<!-- Nav tabs -->
+<ul id="mainMenu" class="nav nav-tabs" role="tablist">
+    <li role="presentation" ng-class="{active: ($route.current.activetab == 'users' || $route.current.activetab == '')}">
+        <a ng-click="changeLocation('users')" role="tab" data-toggle="users">
+            <strong>{{ 'USERS' | translate }}</strong></a>
+    </li>
+    <li role="presentation" ng-class="{active: $route.current.activetab == 'userGroups'}">
+        <a ng-click="changeLocation('user-groups')" role="tab" data-toggle="tab">
+            <strong>{{ 'USER_GROUPS' | translate }}</strong></a>
+    </li>
+    <li role="presentation" ng-class="{active: $route.current.activetab == 'divisions'}">
+        <a ng-click="changeLocation('divisions')" role="tab" data-toggle="tab">
+            <strong>{{ 'DIVISIONS' | translate }}</strong></a>
+    </li>
+</ul>

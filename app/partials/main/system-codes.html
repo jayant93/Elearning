@@ -1,0 +1,184 @@
+    <div class="push-wrap">
+        <div class="container">
+
+           <div ng-include="'main/partials/nav.html'"></div>
+
+           <h3 class="title">System Codes</h3>
+
+            <!-- SEARCH FORM-->
+           <div class="search-wrap">
+           		<div class="col-sm-4">
+                 	<div class="form-group">
+                        <label class="control-label">Category</label>
+                        <select class="form-control" ng-model="searchForm.category">
+                            <option></option>
+                            <option value="DOCUMENT_TYPE">Document Type</option>
+                            <option value="DOCUMENT_STATUS">Document Status</option>
+                            <option value="DOCUMENT">Document</option>
+                        </select>
+                      </div>
+                    <div class="form-group">
+                        <label class="control-label">Key</label>
+                        <input type="text" class="form-control" ng-model="searchForm.key"/>
+                      </div>
+                </div>
+                
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="control-label">Value</label>
+                        <input type="text" class="form-control" ng-model="searchForm.value"/>
+                      </div>
+                    <div class="form-group">
+                        <label class="control-label">Parent</label>
+                        <select class="form-control" ng-model="searchForm.parent">
+                            <option></option>
+                        </select>
+                      </div>
+                </div>
+                
+                <div class="clearfix"></div>
+                
+                <div class="col-sm-12 text-right">
+                	<div class="form-group ">
+                        <button class="btn btn-link" ng-click="clearSystemCodeSearchForm()">Clear</button>
+                        <button class="btn btn-custom" ng-click="searchSystemCodes()"><span class="glyphicon glyphicon-search"></span> Search</button>
+                      </div>
+                </div>
+                
+                <div class="clearfix"></div>
+           </div><!-- /.search-wrap -->
+
+            <!-- SEARCH RESULTS -->
+           <div class="results-wrap">
+           		<div class="col-sm-6"  >
+                    <p ng-lazy-show="searchResult.results">
+                        Displaying {{ searchResult.displayedResultsCount }} of {{ searchResult.totalResults }} records ({{ searchResult.searchTime / 1000 | number : 2}} secs)
+                    </p>
+                </div>
+                <div class="col-sm-6 text-right">
+                	<button type="button" class="btn btn-custom" data-toggle="modal" data-target="#addSystemCodes" ng-click="displayAddSystemCode()"><span class="glyphicon glyphicon-plus-sign"></span> Add System Codes</button>
+                </div>
+                <div class="clearfix"></div>
+                
+                <table class="table table-bordered table-striped table-hover table-responsive" ng-lazy-show="searchResult.results">
+                	<thead>
+                    	<tr class="info">
+                        	<th>Value</th>
+                            <th>Key</th>
+                            <th>Category</th>
+                            <th>Parent</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    	<tr ng-repeat="result in searchResult.results">
+                        	<td>{{ result.value }}</td>
+                            <td>{{ result.key }}</td>
+                            <td>{{ result.category }}</td>
+                            <td>{{ result.parent }}</td>
+                            <td>
+                            	<a href="" ng-click="displayEditSystemCode(result.nosqlId)" data-toggle="modal" data-target="#addSystemCodes"><span class="glyphicon glyphicon-edit"></span></a>
+                                <a href="" ng-click="displayDeleteSystemCode(result.nosqlId)"data-toggle="modal" data-target="#deleteSystemCode"><span class="glyphicon glyphicon-trash"></span></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="text-center">
+                    <div class="dataTables_paginate paging_simple_numbers" ng-lazy-show="searchResult.totalResults >= 1">
+                        <!-- TODO make this an ng-directive -->
+                        <ul class="pagination">
+                            <li class="paginate_button previous" ng-class="{ 'disabled' : searchResult.currPage == searchResult.startPage }">
+                                <a href="" ng-click="searchResult.currPage !== searchResult.startPage && changePage(searchResult.currPage - 1)" aria-controls="documents-table" data-dt-idx="0" tabindex="0">Previous</a>
+                            </li>
+                            <li class="paginate_button" ng-class="{ 'active' : searchResult.currPage == i }"
+                                ng-repeat="i in searchResult.totalPages | range">
+                                <a href="" ng-click="searchResult.currPage !== i && changePage(i)" aria-controls="documents-table" data-dt-idx="{{ i }}" tabindex="0">{{ i }}</a>
+                            </li>
+                            <li class="paginate_button next" ng-class="{ 'disabled' : searchResult.currPage == searchResult.endPage }">
+                                <a href="" ng-click="searchResult.currPage !== searchResult.endPage && changePage(searchResult.currPage + 1)" aria-controls="documents-table" data-dt-idx="{{ searchResult.totalPages + 1 }}" tabindex="0">Next</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+           </div><!-- /.results-wrap -->
+            
+        </div><!-- /.container -->
+        
+    </div>
+
+    <!-- MODALS -->
+    <!-- Add and edit Systemcode MODAL -->
+    <div class="modal fade" id="addSystemCodes" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static">
+      <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalAddLabel" ng-show="isAddForm">Add System Codes</h4>
+                <h4 class="modal-title" id="myModalEditLabel" ng-hide="isAddForm">Edit System Code</h4>
+          </div>
+
+            <form>
+          <div class="modal-body">
+              <div class="alert" ng-class="{'alert-danger': isError,  'alert-success' : !isError}" ng-show="hasMessage">
+                  <strong>{{ resultMessage }}</strong>
+              </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="control-label">Category</label>
+                        <input ng-hide="isSaveSuccess" type="text" ng-model="newSystemCode.category" class="form-control" />
+                        <p ng-show="isSaveSuccess"> {{ newSystemCode.category }} </p>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Key</label>
+                        <input ng-hide="isSaveSuccess"  type="text" ng-model="newSystemCode.key" class="form-control" />
+                        <p ng-show="isSaveSuccess"> {{ newSystemCode.key }} </p>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Value</label>
+                        <input ng-hide="isSaveSuccess"  type="text" ng-model="newSystemCode.value"  class="form-control" />
+                        <p ng-show="isSaveSuccess"> {{ newSystemCode.value }} </p>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Number Value</label>
+                        <input ng-hide="isSaveSuccess"  type="text" ng-model="newSystemCode.numberValue"  class="form-control"/>
+                        <p ng-show="isSaveSuccess"> {{ newSystemCode.numberValue }} </p>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Parent</label>
+                        <input ng-hide="isSaveSuccess"  type="text"  ng-model="newSystemCode.parent" class="form-control"/>
+                        <p ng-show="isSaveSuccess"> {{ newSystemCode.parent }} </p>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary" ng-show="isAddForm && !isSaveSuccess" ng-click="saveAndNew()">Save & New</button>
+            <button type="submit" class="btn btn-custom" ng-hide="isSaveSuccess" ng-click="isAddForm? saveSystemCode(): saveEditSystemCode()">Save</button>
+          </div></form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Delete Systemcode MODAL -->
+    <div class="modal fade" id="deleteSystemCode" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Delete System Code</h4>
+                </div>
+                <div class="modal-body">
+                    <p ng-hide="isDeleteSuccess">Are you sure you want to delete selected system code?</p>
+                    <div class="alert alert-success" ng-show="isDeleteSuccess">
+                        <strong>System Code successfully deleted</strong>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-hide="isDeleteSuccess">No</button>
+                    <button type="button" class="btn btn-primary" ng-click="deleteSystemCode()" ng-hide="isDeleteSuccess">Yes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-show="isDeleteSuccess">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,10 @@
+<html>
+    <body>
+        <h4 style="font-weight: normal;">Dear ${name},</h4>
+
+        <div>
+            Thank you for registering. We are ready to activate your account.
+            Your verification code is <span style="font-weight: bold;text-decoration:underline;">${verificationKey}</span>.
+        </div>
+    </body>
+</html>

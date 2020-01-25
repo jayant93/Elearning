@@ -1,0 +1,217 @@
+    <div class="push-wrap">
+        <div class="container" ng-init="init()">
+
+            <div ng-include="'main/partials/nav.html'"></div>
+
+            <h3 class="title">{{ 'USERS' | translate }}</h3>
+		    <div class="row search-wrap custom-search">
+				<form class="search">
+			        <div class="page-title">User Search</div>
+			        <div class="form-group search-field">
+			            <label for="search-field"></label>
+			            <input ng-model="search.keyword" ng-keydown="$event.keyCode === 13 && keywordSearch()" type="text" class="form-control" id="search-field" placeholder="Keyword Search" />
+			        </div>
+			
+			        <div class="btn-group" ng-click="keywordSearch()">
+			            <div class="search-regular">
+			                <button type="button" class="btn btn-custom bmd-btn-fab" uib-tooltip="Keyword Search" tooltip-placement="bottom"><i class="glyphicon glyphicon-search"></i></button>
+			            </div>
+			        </div>
+			        <div class="btn-group" role="group">
+			            <div class="search-advance dropdown" uib-dropdown auto-close="outsideClick" is-open="showAdvSearchSection">
+			                <button ng-click="showAdvSearchSection=true" type="button" class="btn btn-custom dropdown-toggle bmd-btn-fab"
+			                        uib-tooltip="Advanced Search" tooltip-placement="bottom" aria-expanded="false" uib-dropdown-toggle id="adv-search-btn"><i class="glyphicon glyphicon-chevron-down"></i></button>
+			                <div class="dropdown-menu dropdown-menu-center container adv-wrap" role="menu" uib-dropdown-menu ng-click="$event.stopPropagation()" >
+			
+			                    <div class="row">
+			                        <div class="col-sm-6">
+										<div class="form-group doc-ref-no">
+			                                <label class="form-label">Agency</label>
+			                                <div class="form-control-wrap">
+			                                   <select ng-model="search.advanceSearchCriteria.agency" ng-keydown="$event.keyCode === 13 && advancedSearch()" class="form-control">
+				                                	<option></option>
+				                                	<option value="DSWD">DSWD</option>
+				                                	<option value="DOLE">DOLE</option>
+				                                </select>
+			                                </div>
+			                            </div>
+			                            <div class="form-group doc-ref-no">
+			                                <label class="form-label">Last Name</label>
+			                                <div class="form-control-wrap">
+			                                    <input ng-model="search.advanceSearchCriteria.lastname" ng-keydown="$event.keyCode === 13 && advancedSearch()" type="text" class="form-control"/>
+			                                </div>
+			                            </div>
+			                            <div class="form-group doc-ref-no">
+			                                <label class="form-label">Middle Name</label>
+			                                <div class="form-control-wrap">
+			                                    <input ng-model="search.advanceSearchCriteria.middlename" ng-keydown="$event.keyCode === 13 && advancedSearch()" type="text" class="form-control"/>
+			                                </div>
+			                            </div>
+			                            <div class="form-group doc-ref-no">
+			                                <label class="form-label">First Name</label>
+			                                <div class="form-control-wrap">
+			                                    <input ng-model="search.advanceSearchCriteria.firstname" ng-keydown="$event.keyCode === 13 && advancedSearch()" type="text" class="form-control"/>
+			                                </div>
+			                            </div>
+			                            <div class="form-group doc-ref-no">
+			                                <label class="form-label">Username</label>
+			                                <div class="form-control-wrap">
+			                                    <input ng-model="search.advanceSearchCriteria.username" ng-keydown="$event.keyCode === 13 && advancedSearch()" type="text" class="form-control"/>
+			                                </div>
+			                            </div>
+			                        </div>
+			                        <div class="col-sm-6">
+			                        	<div class="form-group doc-ref-no">
+			                                <label class="form-label">Email</label>
+			                                <div class="form-control-wrap">
+			                                    <input ng-model="search.advanceSearchCriteria.email" ng-keydown="$event.keyCode === 13 && advancedSearch()" type="text" class="form-control"/>
+			                                </div>
+			                            </div>
+			                        	<div class="form-group doc-ref-no">
+			                                <label class="form-label">Group</label>
+			                                <div class="form-control-wrap">
+			                                    <input ng-model="search.advanceSearchCriteria.groups" ng-keydown="$event.keyCode === 13 && advancedSearch()" type="text" class="form-control"/>
+			                                </div>
+			                            </div>
+			                            <div class="form-group doc-ref-no">
+			                                <label class="form-label">Home Department</label>
+			                                <div class="form-control-wrap">
+			                                    <input ng-model="search.advanceSearchCriteria.homeDepartment" ng-keydown="$event.keyCode === 13 && advancedSearch()" type="text" class="form-control"/>
+			                                </div>
+			                            </div>
+			                            <div class="form-group doc-ref-no">
+			                                <label class="form-label">Status</label>
+			                                <div class="form-control-wrap">
+				                                <select ng-model="search.advanceSearchCriteria.status" ng-keydown="$event.keyCode === 13 && advancedSearch()" class="form-control">
+				                                	<option></option>
+				                                	<option value="Active">Active</option>
+				                                	<option value="Pending">Pending</option>
+				                                	<option value="Inactive">Inactive</option>
+				                                	<option value="Rejected">Rejected</option>
+				                                </select>
+			                                </div>
+			                            </div>
+			                        </div>
+			                        <div class="clearfix"></div>
+			                    </div>
+			
+			                    <div class="btn-wrap">
+			                        <button type="button" class="btn btn-clear" id="adv-clear-btn" ng-click="clearAdvancedSearchForm()">CLEAR</button>
+			                        <button type="button" class="btn btn-custom" id="adv-search-submit" ng-click="advancedSearch()">SEARCH</button>
+			                    </div>
+			                </div>
+			            </div>
+			        </div>
+			    </form>
+			    <div class="adv-search-indicator" ng-show="showAdvancedSearchGuide == true"><i class="glyphicon glyphicon-star-empty"></i> You're using Advanced Search</div>
+	
+	    		<div class="divider search"></div>
+			</div>
+
+			<!-- For search results -->
+            <div class="results-wrap" ng-if="searchResults.type === 'search'">
+                <div class="table-top col-sm-12 no-padding">
+                    <result-info search-results="searchResults" class="result-info col-sm-6 no-padding"></result-info>
+                    <div class="col-sm-6 text-right">
+                        <button type="button" class="btn btn-custom" ng-click="createNewUser()">
+                            <span class="glyphicon glyphicon-plus-sign"></span>&nbsp;{{ 'ADD_NEW_USER' | translate }}
+                        </button>
+                    </div>
+                </div>
+
+                <div class="clearfix"></div>
+
+                <table class="table table-bordered table-striped table-hover">
+                    <thead>
+                    <tr class="info">
+                        <th>{{ 'NAME' | translate }}</th>
+						<th>{{ 'AGENCY' | translate }}</th>
+                        <th>{{ 'GROUPS' | translate }}</th>
+                        <th>{{ 'EMAIL' | translate }}</th>
+                        <th>{{ 'STATUS' | translate }}</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="user in searchResults.results.content">
+                            <td><a ng-click="changeLocation('user/' + user.nosqlId)">{{ user.fullName }}</a></td>
+							<td>
+								<div ng-if="user.displayGroups.indexOf('DSWD') > -1" >
+									DSWD
+								</div>
+								<div ng-if="user.displayGroups.indexOf('DOLE') > -1" >
+									DOLE
+								</div>
+                            </td>
+                            <td>
+                                {{ user.displayGroups }}
+                            </td>
+                            <td>{{ user.emailAddress }}</td>
+                            <td><!--{{ user.credential.enabled ? 'Active' : 'Inactive'}}-->{{ user.credential.status }}</td>
+                            <td>
+                                <a ng-click="changeLocation('user/' + user.nosqlId)"><span class="glyphicon glyphicon-edit"></span></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="text-center" ng-if="searchResults.results.totalPages > 1">
+                    <page search-results="searchResults" load-list="loadUsersSearch(page)"></page>
+                </div>
+            </div>
+            
+            <!-- For querying all results, on init -->
+            <div class="results-wrap" ng-if="searchResults.type === 'standard'">
+                <div class="table-top col-sm-12 no-padding">
+                    <result-info search-results="searchResults" class="result-info col-sm-6 no-padding"></result-info>
+                    <div class="col-sm-6 text-right">
+                        <button type="button" class="btn btn-custom" ng-click="createNewUser()">
+                            <span class="glyphicon glyphicon-plus-sign"></span>&nbsp;{{ 'ADD_NEW_USER' | translate }}
+                        </button>
+                    </div>
+                </div>
+
+                <div class="clearfix"></div>
+
+                <table class="table table-bordered table-striped table-hover">
+                    <thead>
+                    <tr class="info">
+                        <th>{{ 'NAME' | translate }}</th>
+						<th>{{ 'AGENCY' | translate }}</th>
+                        <th>{{ 'GROUPS' | translate }}</th>
+                        <th>{{ 'EMAIL' | translate }}</th>
+                        <th>{{ 'STATUS' | translate }}</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="user in searchResults.results">
+                            <td><a ng-click="changeLocation('user/' + user.nosqlId)">{{ user.fullName }}</a></td>
+							<td>
+								<div ng-if="user.displayGroups.indexOf('DSWD') > -1" >
+									DSWD
+								</div>
+								<div ng-if="user.displayGroups.indexOf('DOLE') > -1" >
+									DOLE
+								</div>
+                            </td>
+                            <td>
+                                {{ user.displayGroups }}
+                            </td>
+                            <td>{{ user.emailAddress }}</td>
+                            <td><!--{{ user.credential.enabled ? 'Active' : 'Inactive'}}-->{{ user.credential.status }}</td>
+                            <td>
+                                <a ng-click="changeLocation('user/' + user.nosqlId)"><span class="glyphicon glyphicon-edit"></span></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="text-center" ng-if="searchResults.totalPages > 1">
+                    <page search-results="searchResults" load-list="loadUsers(page)"></page>
+                </div>
+            </div><!-- /.results-wrap -->
+
+        </div><!-- /.container -->
+
+    </div>

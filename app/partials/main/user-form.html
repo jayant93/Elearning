@@ -1,0 +1,128 @@
+<div class="push-wrap">
+    <div class="container">
+        <div ng-include="'main/partials/nav.html'"></div>
+        <h3 class="title">{{ 'EDIT_USER' | translate }}</h3>
+
+        <div class="user-form-wrap" ng-init="loadUser()">
+            <form name="userForm" ng-submit="updateUser()">
+                <div>
+                    <div class="alert alert-danger" ng-show="errorMessages.length > 0">
+                        <ul>
+                            <li ng-repeat="error in errorMessages" >{{ error.message }}</li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-6">
+						<div class="form-group">
+                            <label class="control-label">{{ 'AGENCY' | translate }} </label>
+							<div ng-if="user.displayGroups.indexOf('DSWD') > -1">
+								<input type="text" class="form-control" value="DSWD" readonly />
+							</div>
+							<div ng-if="user.displayGroups.indexOf('DOLE') > -1">
+								<input type="text" class="form-control" value="DOLE" readonly />
+							</div>
+							<div ng-if="user.displayGroups.indexOf('DSWD') === -1 && user.displayGroups.indexOf('DOLE') === -1">
+								<input type="text" class="form-control" value="None" readonly />
+							</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">{{ 'USERNAME' | translate }} <small class="text-danger">{{ 'REQUIRED' | translate }}</small></label>
+                            <input type="text" class="form-control" ng-model="user.credential.username" required readonly/>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">{{ 'FIRST_NAME' | translate }} <small class="text-danger">{{ 'REQUIRED' | translate }}</small></label>
+                            <input type="text" class="form-control" ng-model="user.firstName" required/>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">{{ 'MIDDLE_NAME' | translate }} </label>
+                            <input type="text" class="form-control" ng-model="user.middleName"/>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">{{ 'LAST_NAME' | translate }} <small class="text-danger">{{ 'REQUIRED' | translate }}</small></label>
+                            <input type="text" class="form-control" ng-model="user.lastName" required/>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">{{ 'EMAIL' | translate }} <small class="text-danger">{{ 'REQUIRED' | translate }}</small></label>
+                            <input type="email" class="form-control" ng-model="user.emailAddress" required/>
+                        </div>
+                        <div class="form-group" ng-show="user.credential.status === 'Pending'" style="margin: 0px">
+                            <label class="control-label" style="margin: 0px">
+                                <span class="req"><i class="glyphicon glyphicon-exclamation-sign"></i></span>
+                                {{ 'PENDING_STATUS_MESSAGE' | translate }}
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">{{ 'USER_STATUS' | translate }} <small class="text-danger">{{ 'REQUIRED' | translate }}</small></label>
+                            <div class="form-control-wrap">
+                                <select ng-model="user.credential.status" ng-change="userStatusOnChange()" class="form-control" required>
+                                    <option></option>
+                                    <option value="Active">Active</option>
+                                    <option value="Pending">Pending</option>
+                                    <option value="Inactive">Inactive</option>
+                                    <option value="Rejected">Rejected</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="control-label">{{ 'GROUPS' | translate }} <small class="text-danger">{{ 'REQUIRED' | translate }}</small></label>
+                            <div>
+                                <ul class="list">
+                                    <li ng-repeat="group in user._groups track by $index" class="list-item">
+                                        <span>{{ group }}</span>
+                                        <i ng-click="removeUserGroup(group)" class="glyphicon glyphicon-remove"></i>
+                                    </li>
+                                </ul>
+                            </div>
+                            <input ng-model="user._userGroup.name" type="text"
+                                   uib-typeahead="group.name for group in loadUserGroups($viewValue)"
+                                   typeahead-on-select="onGroupSelect($item)" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">{{ 'DIVISION_HOME_DEPARTMENT' | translate }}</label>
+
+                            <div
+                                 division-list-form ng-model="user.homeDepartment"
+                                 on-type-ahead="getDivisionList(value)"
+                                 typeahead-on-select="onDivisionSelect(item)">
+                            </div>
+                        </div>
+                        <!-- <div class="form-group">
+                            <label class="control-label">{{ 'DIVISION_TYPE_DEPARTMENT' | translate }}</label>
+                            <div>
+                                <ul class="list">
+                                    <li ng-repeat="division in user.divisions track by $index" class="list-item">
+                                        <span>{{ division.name }}</span>
+                                        <span ng-if="division.parent != null">({{division.parent.name}})</span>
+                                        <i ng-click="removeUserDivision(division)" class="glyphicon glyphicon-remove"></i>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div
+                                    division-list-form ng-model="user._userDivision"
+                                    on-type-ahead="getDivisionList(value)"
+                                    typeahead-on-select="onDivisionMultiSelect(item)">
+                            </div>
+                        </div> -->
+                        <div class="form-group" ng-show="user.credential.status === 'Pending'">
+                            <label class="control-label">
+                                <span class="req"><i class="glyphicon glyphicon-exclamation-sign"></i></span>
+                                {{ 'TEMP_PASSWORD' | translate }}
+                            </label>
+                            <input type="text" class="form-control" ng-model="user.credential.tempPassword" ng-disabled="true" required/>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" ng-click="changeLocation('users')">{{ 'CLOSE' | translate }}</button>
+                    <button type="submit" class="btn btn-custom">{{ 'SAVE' | translate }}</button>
+                </div>
+            </form>
+        </div><!-- /.results-wrap -->
+
+    </div><!-- /.container -->
+
+</div>
+    

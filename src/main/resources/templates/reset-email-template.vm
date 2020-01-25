@@ -1,0 +1,16 @@
+<html>
+    <body>
+        <h3 style="font-weight: normal;">Hi ${name},</h3>
+
+        <div>
+        	It looks like you requested a new password <br/><br/>
+        	If that's sounds right, please click the button below. This will direct you to a designated
+            web page and allow you to enter and confirm your password. <br/><br/>
+			
+			<a href="${resetPasswordUrl}#!/resetPassword/${resetPasswordKey}" class="button">
+				<button>Reset password</button>
+			</a>
+            <br/><br/>
+        </div>
+    </body>
+</html>

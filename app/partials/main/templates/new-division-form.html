@@ -1,0 +1,59 @@
+<!-- MODAL FOR NEW DIVISION -->
+<div class="modal fade in" aria-hidden="false" style="display: block;" ng-show="modal.divisionForm">
+    <div class="modal-dialog" ng-init="initForm()">
+        <div class="modal-content">
+            <form ng-submit="saveDivision();">
+                <div class="modal-header">
+                    <h3 class="modal-title">{{ 'ADD_DIVISION' | translate }}</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-danger" ng-show="errorMessages.length > 0">
+                        <ul>
+                            <li ng-repeat="error in errorMessages" >{{ error.message }}</li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label class="control-label">{{ 'DIVISION_NAME' | translate }} <small class="text-danger">{{ 'REQUIRED' | translate }}</small></label>
+                            <input type="text" class="form-control" ng-model="division.name" required/>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">{{ 'DIVISION_DESCRIPTION' | translate }} <small class="text-danger">{{ 'REQUIRED' | translate }}</small></label>
+                            <input type="text" class="form-control" ng-model="division.description" required/>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">{{ 'DIVISION_KEY' | translate }} <small class="text-danger">{{ 'REQUIRED' | translate }}</small></label>
+                            <input type="text" class="form-control" ng-model="division.key" capitalize to-key disallow-spaces required/>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">{{ 'DIVISION_NUMBER_VALUE' | translate }} <small class="text-danger">{{ 'REQUIRED' | translate }}</small></label>
+                            <input type="number" class="form-control" ng-model="division.numberValue" disallow-spaces required/>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">{{ 'DIVISION_PARENT' | translate }}</label>
+                            <div division-list-form ng-model="division.parent"
+                                 on-type-ahead="getDivisionList(value)"
+                                 typeahead-on-select="onDivisionSelect(item)">
+                            </div>
+                        </div>
+                        <!-- <div class="form-group">
+                            <label class="control-label">{{ 'DIVISION_TYPE' | translate }} <small class="text-danger">{{ 'REQUIRED' | translate }}</small></label>
+                            <select class="form-control" ng-model="division.type" required>
+                            	<option></option>
+                                <option value="DEPARTMENT">{{ 'DIVISION_TYPE_DEPARTMENT' | translate }}</option>
+                                <option value="SECTION">{{ 'DIVISION_TYPE_SECTION' | translate }}</option>
+                            </select>
+                        </div> -->
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" ng-click="modal.divisionForm = false;">{{ 'CLOSE' | translate }}</button>
+                    <button type="submit" class="btn btn-primary" ng-click="modal.createNew = true;">{{ 'SAVE_AND_NEW' | translate }}</button>
+                    <button type="submit" class="btn btn-custom" ng-click="modal.createNew = false;">{{ 'SAVE' | translate }}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

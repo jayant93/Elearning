@@ -1,0 +1,15 @@
+<script type="text/ng-template" id="divisionPopup.html">
+    <a>
+        <span ng-bind-html="match.label | uibTypeaheadHighlight:query"></span>
+        <span ng-if="match.model.parent != null">({{match.model.parent.name}})</span>
+    </a>
+</script>
+
+<div class="input-group col-sm-12 division-dropdown">
+    <input type="text" class="form-control" aria-describedby="sizing-addon2" ng-model="ngModel.name"
+           uib-typeahead="division.name for division in onTypeAhead({ value: $viewValue })" typeahead-min-length="3" ng-model-options="{debounce: 500}"
+           typeahead-on-select="typeaheadOnSelect({ 'item' : $item })"  class="form-control" ng-disabled="ngModel.id"
+           typeahead-template-url="divisionPopup.html"
+    >
+    <span class="input-group-addon" id="sizing-addon2" ng-show="ngModel.id" ng-click="ngModel = null">×</span>
+</div>

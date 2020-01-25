@@ -1,0 +1,172 @@
+
+    <div class="push-wrap">
+        <div class="container" ng-init="initSearchParams()">
+
+            <div ng-include="'main/partials/nav.html'"></div>
+            <h3 class="title">{{ 'USER_GROUPS' | translate }}</h3>
+
+			<div class="row search-wrap custom-search">
+				<form class="search">
+			        <div class="page-title">User Group Search</div>
+			        <div class="form-group search-field">
+			            <label for="search-field"></label>
+			            <input ng-model="search.keyword" ng-keydown="$event.keyCode === 13 && keywordSearch()" type="text" class="form-control" id="search-field" placeholder="Keyword Search" />
+			        </div>
+			
+			        <div class="btn-group" ng-click="keywordSearch()">
+			            <div class="search-regular">
+			                <button type="button" class="btn btn-custom bmd-btn-fab" uib-tooltip="Keyword Search" tooltip-placement="bottom"><i class="glyphicon glyphicon-search"></i></button>
+			            </div>
+			        </div>
+			        <div class="btn-group" role="group">
+			            <div class="search-advance dropdown" uib-dropdown auto-close="outsideClick" is-open="showAdvSearchSection">
+			                <button ng-click="showAdvSearchSection=true" type="button" class="btn btn-custom dropdown-toggle bmd-btn-fab"
+			                        uib-tooltip="Advanced Search" tooltip-placement="bottom" aria-expanded="false" uib-dropdown-toggle id="adv-search-btn"><i class="glyphicon glyphicon-chevron-down"></i></button>
+			                <div class="dropdown-menu dropdown-menu-center container adv-wrap" role="menu" uib-dropdown-menu ng-click="$event.stopPropagation()" >
+			
+			                    <div class="row">
+			                        <div class="col-sm-6">
+			                            <div class="form-group doc-ref-no">
+			                                <label class="form-label">Name</label>
+			                                <div class="form-control-wrap">
+			                                    <input ng-model="search.advanceSearchCriteria.name" ng-keydown="$event.keyCode === 13 && advancedSearch()" type="text" class="form-control" id="doc-ref-no"/>
+			                                </div>
+			                            </div>
+			                        </div>
+			                        <div class="col-sm-6">
+			                        	<div class="form-group doc-ref-no">
+			                                <label class="form-label">Description</label>
+			                                <div class="form-control-wrap">
+			                                    <input ng-model="search.advanceSearchCriteria.description" ng-keydown="$event.keyCode === 13 && advancedSearch()" type="text" class="form-control" id="doc-ref-no"/>
+			                                </div>
+			                            </div>
+			                        </div>
+			                        <div class="clearfix"></div>
+			                    </div>
+			
+			                    <div class="btn-wrap">
+			                        <button type="button" class="btn btn-clear" id="adv-clear-btn" ng-click="clearAdvancedSearchForm()">CLEAR</button>
+			                        <button type="button" class="btn btn-custom" id="adv-search-submit" ng-click="advancedSearch()">SEARCH</button>
+			                    </div>
+			                </div>
+			            </div>
+			        </div>
+			    </form>
+			    <div class="adv-search-indicator" ng-show="showAdvancedSearchGuide == true"><i class="glyphicon glyphicon-star-empty"></i> You're using Advanced Search</div>
+	
+	    		<div class="divider search"></div>
+			</div>
+
+			<!-- For search results -->
+            <div class="results-wrap" ng-if="searchResults.type === 'search'">
+                <div class="table-top col-sm-12 no-padding">
+                    <result-info search-results="searchResults" class="result-info"></result-info>
+                    <div class="text-right">
+                        <button type="button" class="btn btn-custom" ng-click="changeLocation('user-group')" >
+                            <span class="glyphicon glyphicon-plus-sign"></span>&nbsp;{{ 'ADD_USER_GROUP' | translate }}
+                        </button>
+                    </div>
+                </div>
+
+                <div class="clearfix"></div>
+
+                <table class="table table-bordered table-striped table-hover">
+                    <thead>
+                    <tr class="info">
+                        <th>{{ 'NAME' | translate }}</th>
+                        <th>{{ 'DESCRIPTION' | translate }}</th>
+                        <th>{{ 'PERMISSION_NO' | translate }}</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="userGroup in searchResults.results.content">
+                            <td>{{ userGroup.name }}</td>
+                            <td>{{ userGroup.description }}</td>
+							<!-- REMOVE Unused Auth Filter -->
+                            <td ng-init="userGroup.cnt=userGroup.authorityNames.length;
+								userGroup.cnt= (userGroup.authorityNames.indexOf('VIEW_') >= 0) ? userGroup.cnt-1 : userGroup.cnt;
+								userGroup.cnt= (userGroup.authorityNames.indexOf('VIEW_CASE_REPORT') >= 0) ? userGroup.cnt-1 : userGroup.cnt;
+								userGroup.cnt= (userGroup.authorityNames.indexOf('VIEW_REFERRAL_FORM') >= 0) ? userGroup.cnt-1 : userGroup.cnt;
+								userGroup.cnt= (userGroup.authorityNames.indexOf('VIEW_FEEDBACK_FORM') >= 0) ? userGroup.cnt-1 : userGroup.cnt;
+								userGroup.cnt= (userGroup.authorityNames.indexOf('MANAGE_CASE_REPORT') >= 0) ? userGroup.cnt-1 : userGroup.cnt;
+								">
+									{{ userGroup.cnt }}
+							</td>
+                            <td>
+                                <a ng-click="changeLocation('user-group/' + userGroup.nosqlId)"><span class="glyphicon glyphicon-edit"></span></a>
+                                <!--a ng-click="deleteUserGroup(userGroup.nosqlId)"><span class="glyphicon glyphicon-trash"></span></a-->
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="row" ng-if="searchResults.results.totalPages > 1">
+                    <div class="col-sm-5"></div>
+                    <div class="col-sm-7">
+                        <div class="dataTables_paginate paging_simple_numbers" ng-lazy-show="searchResults.results.totalElements >= 1">
+                            <page search-results="searchResults" load-list="loadUsergroupsSearch(page)"></page>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            
+            <!-- For querying all results, on init -->
+            <div class="results-wrap" ng-if="searchResults.type === 'standard'">
+                <div class="table-top col-sm-12 no-padding">
+                    <result-info search-results="searchResults" class="result-info"></result-info>
+                    <div class="text-right">
+                        <button type="button" class="btn btn-custom" ng-click="changeLocation('user-group')" >
+                            <span class="glyphicon glyphicon-plus-sign"></span>&nbsp;{{ 'ADD_USER_GROUP' | translate }}
+                        </button>
+                    </div>
+                </div>
+
+                <div class="clearfix"></div>
+
+                <table class="table table-bordered table-striped table-hover">
+                    <thead>
+                    <tr class="info">
+                        <th>{{ 'NAME' | translate }}</th>
+                        <th>{{ 'DESCRIPTION' | translate }}</th>
+                        <th>{{ 'PERMISSION_NO' | translate }}</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="userGroup in searchResults.results">
+                            <td>{{ userGroup.name }}</td>
+                            <td>{{ userGroup.description }}</td>
+							<!-- REMOVE Unused Auth Filter -->
+							<td ng-init="userGroup.cnt=userGroup.authorityNames.length;
+								userGroup.cnt= (userGroup.authorityNames.indexOf('VIEW_') >= 0) ? userGroup.cnt-1 : userGroup.cnt;
+								userGroup.cnt= (userGroup.authorityNames.indexOf('VIEW_CASE_REPORT') >= 0) ? userGroup.cnt-1 : userGroup.cnt;
+								userGroup.cnt= (userGroup.authorityNames.indexOf('VIEW_REFERRAL_FORM') >= 0) ? userGroup.cnt-1 : userGroup.cnt;
+								userGroup.cnt= (userGroup.authorityNames.indexOf('VIEW_FEEDBACK_FORM') >= 0) ? userGroup.cnt-1 : userGroup.cnt;
+								userGroup.cnt= (userGroup.authorityNames.indexOf('MANAGE_CASE_REPORT') >= 0) ? userGroup.cnt-1 : userGroup.cnt;
+								">
+									{{ userGroup.cnt }}
+							</td>
+                            <td>
+                                <a ng-click="changeLocation('user-group/' + userGroup.nosqlId)"><span class="glyphicon glyphicon-edit"></span></a>
+                                <!--a ng-click="deleteUserGroup(userGroup.nosqlId)"><span class="glyphicon glyphicon-trash"></span></a-->
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="row" ng-if="searchResults.totalPages > 1">
+                    <div class="col-sm-5"></div>
+                    <div class="col-sm-7">
+                        <div class="dataTables_paginate paging_simple_numbers" ng-lazy-show="searchResults.totalResults >= 1">
+                            <page search-results="searchResults" load-list="loadUserGroups(page)"></page>
+                        </div>
+                    </div>
+                </div>
+
+            </div><!-- /.results-wrap -->
+
+        </div><!-- /.container -->
+
+    </div>

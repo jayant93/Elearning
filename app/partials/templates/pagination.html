@@ -1,0 +1,41 @@
+<ul class="pagination" ng-if="searchResults.type === 'search'">
+	<li class="paginate_button previous" ng-class="{ 'disabled' : (searchResults.results.number + 1) == 1 }">
+        <a href="" ng-click="(searchResults.results.number + 1) !== 1 && loadList({ page : 1 })" aria-controls="documents-table" data-dt-idx="1" tabindex="0"><span class="glyphicon glyphicon-fast-backward"></span></a>
+    </li>
+    <li class="paginate_button previous" ng-class="{ 'disabled' : (searchResults.results.number + 1) == 1 }">
+        <a href="" ng-click="(searchResults.results.number + 1) !== 1 && loadList({ page : (searchResults.results.number + 1) - 1})" aria-controls="documents-table" data-dt-idx="{{ (searchResults.results.number + 1) - 1 }}" tabindex="0"><span class="glyphicon glyphicon-backward"></span></a>
+    </li>
+    <li class="paginate_button" ng-class="{ 'active' : (searchResults.results.number + 1) == i }"
+        ng-repeat="i in (searchResults.results.totalPages | range).slice(0, (searchResults.results.totalPages))"
+        ng-if="(searchResults.results.number <= 10 && i <= 10 && i >= ( searchResults.results.number - (10/2)))
+               || (i < ( searchResults.results.number + (10/2) ) && i > ( searchResults.results.number - (10/2) ))
+               || (i > ( searchResults.results.totalPages - 10) && searchResults.results.number >= ( searchResults.results.totalPages - (10/2) ))">
+        <a href="" ng-click="(searchResults.results.number + 1) !== i && loadList({ page : i })" aria-controls="documents-table" data-dt-idx="{{ i }}" tabindex="0">{{ i }}</a>
+    </li>
+    <li class="paginate_button next" ng-class="{ 'disabled' : (searchResults.results.number + 1) == searchResults.results.totalPages }">
+        <a href="" ng-click="(searchResults.results.number + 1) !== searchResults.results.totalPages && loadList({ page: (searchResults.results.number + 1) + 1})" aria-controls="documents-table" data-dt-idx="{{ (searchResults.results.number + 1) + 1 }}" tabindex="0"><span class="glyphicon glyphicon-forward"></span></a>
+    </li>
+	 <li class="paginate_button next" ng-class="{ 'disabled' : (searchResults.results.number + 1) == searchResults.results.totalPages }">
+        <a href="" ng-click="(searchResults.results.number + 1) !== searchResults.results.totalPages && loadList({ page: searchResults.results.totalPages })" aria-controls="documents-table" data-dt-idx="{{ searchResults.results.totalPages }}" tabindex="0"><span class="glyphicon glyphicon-fast-forward"></span></a>
+    </li>
+</ul>
+
+<ul class="pagination" ng-if="searchResults.type === 'standard'">
+    <li class="paginate_button previous" ng-class="{ 'disabled' : searchResults.currPage == 1 }">
+        <a href="" ng-click="searchResults.currPage !== 1 && loadList({ page : 1 })" aria-controls="documents-table" data-dt-idx="1" tabindex="0"><span class="glyphicon glyphicon-fast-backward"></span></a>
+    </li>
+    <li class="paginate_button previous" ng-class="{ 'disabled' : searchResults.currPage == searchResults.startPage }">
+        <a href="" ng-click="searchResults.currPage !== searchResults.startPage && loadList({ page : searchResults.currPage - 1})" aria-controls="documents-table" data-dt-idx="{{ searchResults.currPage - 1 }}" tabindex="0"><span class="glyphicon glyphicon-backward"></span></a>
+    </li>
+    <li class="paginate_button" ng-class="{ 'active' : searchResults.currPage == i }"
+        ng-repeat="i in (searchResults.totalPages | range).slice(searchResults.startPage-1, searchResults.endPage)">
+        <a href="" ng-click="searchResults.currPage !== i && loadList({ page : i })" aria-controls="documents-table" data-dt-idx="{{ i }}" tabindex="0">{{ i }}</a>
+    </li>
+    <li class="paginate_button next" ng-class="{ 'disabled' : searchResults.currPage == searchResults.endPage }">
+        <a href="" ng-click="searchResults.currPage !== searchResults.endPage && loadList({ page: searchResults.currPage + 1})" aria-controls="documents-table" data-dt-idx="{{ searchResults.currPage + 1 }}" tabindex="0"><span class="glyphicon glyphicon-forward"></span></a>
+    </li>
+     <li class="paginate_button next" ng-class="{ 'disabled' : searchResults.currPage == searchResults.totalPages }">
+        <a href="" ng-click="searchResults.currPage !== searchResults.totalPages && loadList({ page: searchResults.totalPages })" aria-controls="documents-table" data-dt-idx="{{ searchResults.totalPages }}" tabindex="0"><span class="glyphicon glyphicon-fast-forward"></span></a>
+    </li>
+</ul>
+

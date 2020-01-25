@@ -1,0 +1,32 @@
+[
+  {
+    "key" : "MANAGE_APPLICATION",
+    "level" : "01.00.00.00",
+    "title" : "Manage Application"
+  },
+  {
+    "key" : "MANAGE_ORGANIZATION",
+    "level" : "02.00.00.00",
+    "title" : "Manage ORGANIZATION"
+  },
+  {
+    "key" : "MANAGE_USERGROUP",
+    "level" : "02.01.00.00",
+    "title" : "Manage Usergroup"
+  },
+  {
+    "key" : "MANAGE_USER",
+    "level" : "02.02.00.00",
+    "title" : "Manage User"
+  },
+  {
+    "key" : "MANAGE_SYSTEM",
+    "level" : "03.00.00.00",
+    "title" : "Manage System"
+  },
+  {
+    "key" : "MANAGE_SYSTEM_CODES",
+    "level" : "03.01.00.00",
+    "title" : "Manage System Codes"
+  }
+]

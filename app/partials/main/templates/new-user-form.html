@@ -1,0 +1,82 @@
+<!-- MODAL FOR NEW USER -->
+<div class="modal-header">
+    <h3 class="modal-title">{{ 'ADD_NEW_USER' | translate }}</h3>
+</div>
+<div class="modal-body">
+    <form name="userForm" ng-submit="saveUser()" ng-init="initUser()">
+        <div class="modal-body">
+            <div class="alert alert-danger" ng-show="errorMessages.length > 0">
+                <ul>
+                    <li ng-repeat="error in errorMessages" >{{ error.message }}</li>
+                </ul>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="control-label">{{ 'USERNAME' | translate }} <small class="text-danger">{{ 'REQUIRED' | translate }}</small></label>
+                    <input type="text" class="form-control" ng-model="user.credential.username" disallow-spaces required/>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">{{ 'FIRST_NAME' | translate }} <small class="text-danger">{{ 'REQUIRED' | translate }}</small></label>
+                    <input type="text" class="form-control" ng-model="user.firstName" required/>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">{{ 'MIDDLE_NAME' | translate }} </label>
+                    <input type="text" class="form-control" ng-model="user.middleName"/>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">{{ 'LAST_NAME' | translate }} <small class="text-danger">{{ 'REQUIRED' | translate }}</small></label>
+                    <input type="text" class="form-control" ng-model="user.lastName" required/>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">{{ 'EMAIL' | translate }} <small class="text-danger">{{ 'REQUIRED' | translate }}</small></label>
+                    <input type="email" class="form-control" ng-model="user.emailAddress" required/>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">{{ 'PASSWORD' | translate }} <small class="text-danger">{{ 'REQUIRED' | translate }}</small></label>
+                    <input type="password" class="form-control" ng-minlength="8" ng-model="user.credential.newPassword" name="newPassword" required/>
+                    <span class="text-warning" ng-show="userForm.newPassword.$error.minlength">{{ 'PASSWORD_MIN_LENGTH_ERROR' | translate }}</span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">{{ 'CONFIRM_PASSWORD' | translate }} <small class="text-danger">{{ 'REQUIRED' | translate }}</small></label>
+                    <input type="password" class="form-control" ng-model="user.credential.confirmPassword" name="confirmPassword"
+                           ui-validate=" '$value == user.credential.newPassword' " ui-validate-watch=" 'user.credential.newPassword' " required/>
+                    <span class="text-warning" ng-show="userForm.confirmPassword.$error.validator">{{ 'CONFIRM_PASSWORD_ERROR' | translate }}</span>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="control-label">{{ 'GROUPS' | translate }} <small class="text-danger">{{ 'REQUIRED' | translate }}</small></label>
+                    <div ng-show="user.groups.length > 0">
+                        <ul class="list">
+                            <li ng-repeat="group in user._groups track by $index" class="list-item">
+                                <span>{{ group }}</span>
+                                <i ng-click="removeUserGroup(group)" class="glyphicon glyphicon-remove"></i>
+                            </li>
+                        </ul>
+                    </div>
+                    <input ng-model="user._userGroup.name" type="text"
+                           uib-typeahead="group.name for group in loadUserGroups($viewValue)"
+                           typeahead-on-select="onGroupSelect($item)" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label class="control-label">{{ 'USER_STATUS' | translate }} <small class="text-danger">{{ 'REQUIRED' | translate }}</small></label>
+                    <div class="form-control-wrap">
+                        <select ng-model="user.credential.status" class="form-control" required>
+                            <option></option>
+                            <option value="Active">Active</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Inactive">Inactive</option>
+                            <option value="Rejected">Rejected</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" ng-click="close();">{{ 'CLOSE' | translate }}</button>
+            <button type="submit" class="btn btn-primary" ng-click="createNew = true;">{{ 'SAVE_AND_NEW' | translate }}</button>
+            <button type="submit" class="btn btn-custom">{{ 'SAVE' | translate }}</button>
+        </div>
+    </form>
+</div>

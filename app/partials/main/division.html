@@ -1,0 +1,80 @@
+<div class="push-wrap">
+    <div class="container">
+        <div ng-include="'main/partials/nav.html'"></div>
+        <h3 class="title" ng-hide="isEdit">{{ 'VIEW_DIVISION' | translate }}</h3>
+        <h3 class="title" ng-show="isEdit">{{ 'EDIT_DIVISION' | translate }}</h3>
+
+        <div class="user-form-wrap" ng-init="loadDivision()">
+            <form name="userForm" ng-submit="saveDivision()">
+                <div>
+                    <div class="alert alert-danger" ng-show="errorMessages.length > 0">
+                        <ul>
+                            <li ng-repeat="error in errorMessages" >{{ error.message }}</li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="control-label">{{ 'DIVISION_NAME' | translate }} <small class="text-danger">{{ 'REQUIRED' | translate }}</small></label>
+                            <div ng-hide="isEdit">{{ division.name }}</div>
+                            <input ng-show="isEdit" type="text" class="form-control" ng-model="division.name" required/>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">{{ 'DIVISION_DESCRIPTION' | translate }} <small class="text-danger">{{ 'REQUIRED' | translate }}</small></label>
+                            <div ng-hide="isEdit">{{ division.description }}</div>
+                            <input ng-show="isEdit" type="text" class="form-control" ng-model="division.description" required/>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">{{ 'DIVISION_KEY' | translate }} <small class="text-danger">{{ 'REQUIRED' | translate }}</small></label>
+                            <div ng-hide="isEdit">{{ division.key }}</div>
+                            <input ng-show="isEdit" type="text" class="form-control" ng-model="division.key" capitalize to-key disallow-spaces readonly required/>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">{{ 'DIVISION_NUMBER_VALUE' | translate }} <small class="text-danger">{{ 'REQUIRED' | translate }}</small></label>
+                            <div ng-hide="isEdit">{{ division.numberValue }}</div>
+                            <input ng-show="isEdit" ng-disabled="true" type="number" class="form-control" ng-model="division.numberValue" disallow-spaces required/>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">{{ 'DIVISION_PARENT' | translate }}</label>
+                            <div ng-hide="isEdit">{{ division.parent.name }}</div>
+                            <div ng-show="isEdit"
+                                 division-list-form ng-model="division.parent"
+                                 on-type-ahead="getDivisionList(value)"
+                                 typeahead-on-select="onDivisionSelect(item)">
+                            </div>
+                        </div>
+                        <!-- <div class="form-group">
+                            <label class="control-label">{{ 'DIVISION_TYPE' | translate }}</label>
+                            <div ng-hide="isEdit">{{ division.type }}</div>
+                            <select ng-model="division.type" ng-show="isEdit" class="form-control" required>
+                                <option></option>
+                                <option value="DEPARTMENT">{{ 'DIVISION_TYPE_DEPARTMENT' | translate }}</option>
+                                <option value="SECTION">{{ 'DIVISION_TYPE_SECTION' | translate }}</option>
+                            </select>
+                        </div> -->
+                    </div>
+                    <!-- <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="control-label">{{ 'DIVISION_MEMBERS' | translate }}</label>
+                            <div>
+                                <ul class="list">
+                                    <li ng-repeat="member in division._members track by $index" class="list-item">
+                                        <span>{{ member.fullName }}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div> -->
+                    <div class="clearfix"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" ng-click="changeLocation('divisions')">{{ 'BACK' | translate }}</button>
+                    <button type="button" class="btn btn-custom" ng-hide="isEdit" ng-click="isEdit = true;">{{ 'EDIT' | translate }}</button>
+                    <button type="submit" class="btn btn-custom" ng-show="isEdit">{{ 'SAVE' | translate }}</button>
+                </div>
+            </form>
+        </div><!-- /.results-wrap -->
+
+    </div><!-- /.container -->
+
+</div>
+    

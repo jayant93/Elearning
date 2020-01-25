@@ -1,0 +1,27 @@
+<div ng-if="searchResults.type === 'search'">
+	<div class="pull-left" ng-lazy-show="searchResults.results.totalElements <= 0">
+	    <p>{{ 'NO_RESULTS' | translate }}</p>
+	</div>
+	
+	<div ng-lazy-show="searchResults.results.totalElements > 0">
+	    <div class="pull-left">
+	        <p>
+	            Displaying {{ (searchResults.results.number * searchResults.results.size) + searchResults.results.numberOfElements }} of {{ searchResults.results.totalElements }} records ({{ searchResults.searchTime / 1000 | number : 2}} secs)
+	        </p>
+	    </div>
+	</div>
+</div>
+
+<div ng-if="searchResults.type === 'standard'">
+	<div class="pull-left" ng-lazy-show="searchResults.totalResults <= 0">
+	    <p>{{ 'NO_RESULTS' | translate }}</p>
+	</div>
+	
+	<div ng-lazy-show="searchResults.totalResults > 0">
+	    <div class="pull-left">
+	        <p>
+	            Displaying {{ ((searchResults.currPage * searchResults.pageSize) - searchResults.pageSize) + searchResults.displayedResultsCount }} of {{ searchResults.totalResults }} records ({{ searchResults.searchTime / 1000 | number : 2}} secs)
+	        </p>
+	    </div>
+	</div>
+</div>
