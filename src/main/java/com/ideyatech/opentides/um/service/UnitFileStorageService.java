@@ -54,13 +54,13 @@ public class UnitFileStorageService {
 		String serverPath ="http://localhost:8080/home/vijay/Desktop/elerning12-01-20/op07/archlatform/webapps/"+fileName;
 	
 		// File dir = new File(fullPath+ File.separator + fileName);
-		File dir = new File(fullPath + File.separator);
-		if (!dir.exists())
-			dir.mkdirs();
-		File serverFile = new File(dir.getAbsolutePath() + File.separator + fileName);
+		//File dir = new File(fullPath + File.separator);
+		//if (!dir.exists())
+		//	dir.mkdirs();
+		//File serverFile = new File(dir.getAbsolutePath() + File.separator + fileName);
 
-        BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
-		stream.write(bytes);
+       // BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
+		//stream.write(bytes);
 		
 		Unit dbFile = unitrepo.findOne(id);
 		String s1 = Base64.getEncoder().encodeToString(bytes);
